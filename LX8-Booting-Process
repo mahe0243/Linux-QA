@@ -3,10 +3,10 @@
 Firmware (BIOS/UEFI)
 =====================
 
-Runs POST (Power‑On Self Test): checks CPU, RAM, keyboard, storage controllers, and the RTC (Real‑Time Clock).
-If any device fails, firmware throws an error immediately (beep codes or error message) and halts boot.
-If everything is fine, firmware looks for the boot partition / EFI System Partition on the selected boot device.
-Once found, it passes control to GRUB2.
+* Runs POST (Power‑On Self Test): checks CPU, RAM, keyboard, storage controllers, and the RTC (Real‑Time Clock).
+* If any device fails, firmware throws an error immediately (beep codes or error message) and halts boot.
+* If everything is fine, firmware looks for the boot partition / EFI System Partition on the selected boot device.
+* Once found, it passes control to GRUB2.
 
 
 Boot Loader (GRUB2)

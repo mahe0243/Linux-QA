@@ -1,0 +1,67 @@
+🔑 Expanded Standard Flow (Linux 8 Boot Process)
+
+Firmware (BIOS/UEFI)
+=====================
+
+Runs POST (Power‑On Self Test): checks CPU, RAM, keyboard, storage controllers, and the RTC (Real‑Time Clock).
+
+If any device fails, firmware throws an error immediately (beep codes or error message) and halts boot.
+
+If everything is fine, firmware looks for the boot partition / EFI System Partition on the selected boot device.
+
+Once found, it passes control to GRUB2.
+
+
+Boot Loader (GRUB2)
+========================
+
+GRUB2 presents a menu of available kernels and boot options.
+
+You can see multiple kernel versions here and select the one you want (latest, older fallback, rescue mode).
+
+Loads the chosen kernel (vmlinuz) and initramfs into memory.
+
+Passes kernel parameters (e.g., root=UUID=..., systemd.unit=rescue.target).
+
+
+Kernel Initialization
+==========================
+
+Decompression: The kernel image is compressed; it unpacks itself into RAM and begins execution.
+
+Core setup: Initializes CPU scheduling, memory management, and interrupt handling.
+
+Driver & module loading: Loads built‑in drivers and kernel modules from /lib/modules/<version>/ to enable hardware (disk, network, USB, graphics).
+
+Temporary root: Uses initramfs to mount a temporary root filesystem until the real root is found.
+
+If drivers are missing or root UUID is wrong, you’ll see a kernel panic.
+
+
+Initramfs (Dracut in RHEL 8)
+================================
+Provides essential drivers for storage, RAID, LVM, encryption.
+
+Runs scripts to locate and mount the actual root filesystem.
+
+Once successful, the kernel switches from initramfs to the real root.
+
+
+systemd Initialization (PID 1)
+=================================
+systemd replaces the old SysV init system.
+
+Reads the default target (multi-user.target or graphical.target).
+
+Starts services in parallel using unit files (.service, .target, .mount).
+
+Handles dependencies, logging, and recovery (rescue/emergency mode).
+
+
+Login Stage
+================
+Text mode: getty starts on virtual terminals and provides a username/password prompt on the console.
+
+Graphical mode: A Display Manager (like GDM, LightDM, or SDDM) provides a GUI login screen.
+
+Once you log in, the shell or desktop environment starts, and the system is fully ready for use
